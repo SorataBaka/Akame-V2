@@ -8,8 +8,10 @@
   "version": "1.0.0",
   "description": "Yandere Kitsune bot for Sashimi Discord Server at discord.gg/sashimi",
   "main": "index.ts",
+  
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "tsc && node ./build/index.js",
+    "start-ts": "ts-node index.ts",
     "build": "tsc",
     "dev": "nodemon --exec ts-node index.ts"
   },
