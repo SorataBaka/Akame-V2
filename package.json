@@ -1,14 +1,16 @@
 {
   "dependencies": {
+    "@types/redis": "^2.8.32",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.0.12",
+    "redis": "^3.1.2"
   },
   "name": "akame-v2",
   "version": "1.0.0",
   "description": "Yandere Kitsune bot for Sashimi Discord Server at discord.gg/sashimi",
   "main": "index.ts",
-  
   "scripts": {
     "start": "tsc && node ./build/index.js",
     "start-ts": "ts-node index.ts",

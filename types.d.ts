@@ -1,4 +1,6 @@
 import { Message, Client, Collection, GuildMember } from 'discord.js';
+import { Model, Mongoose, Schema } from "mongoose"
+import { RedisClient } from 'redis';
 export interface Command {
   name: string
   description: string
@@ -24,11 +26,31 @@ export interface messageDeleteHeader {
   messageid:string
   data:messageDeleteContent
 }
+
+export interface messageEditContent{
+  messageAuthor:string,
+  oldMessageContent:string,
+  newMessageContent:string,
+  oldMessage:Message,
+  newMessage:Message,
+  member:GuildMember | null
+}
+
+export interface messageEditHeader{
+  messageid: string
+  data: messageEditContent
+}
+
 export interface ClientFunctionInterface {
   generateColor:Function
 }
 export interface ClientCollectionsInterface {
   deleteSnipes:Collection<string, messageDeleteHeader[]>
+  editSnipes:Collection<string, messageEditHeader[]>
+}
+export interface ClientDatabaseInterface {
+  guildData:Model
+  RedisClient:RedisClient
 }
 export interface ClientExtensionInterface extends Client{
   MessageCommands:Collection<string, Command>
@@ -37,4 +59,5 @@ export interface ClientExtensionInterface extends Client{
   PREFIX:string
   ClientFunction:ClientFunctionInterface
   ClientCollection:ClientCollectionsInterface
+  ClientDatabase:ClientDatabaseInterface
 }
