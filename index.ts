@@ -1,22 +1,24 @@
 import { Client, Intents, Collection } from "discord.js"
 import { config } from "dotenv"
+
 import { Command, Events, ClientExtensionInterface, ClientFunctionInterface, ClientCollectionsInterface, ClientDatabaseInterface } from "./types"
 import ClientFunction from "./assets/classes/ClientFunctions"
 import ClientCollection from "./assets/classes/ClientCollections"
 import ClientDatabase from "./assets/classes/ClientDatabase"
 import fs from "fs"
 config()
-
+console.clear()
 if(!process.env.TOKEN || !process.env.PREFIX  || !process.env.URI) {
     console.error("Environmental variable for TOKEN, PREFIX, and URI is needed.")
     process.exit(1)
 }
 
+//Process all required ENV's
 const TOKEN = process.env.TOKEN as string
 const URI = process.env.URI as string
 const REDIS_CONNECTION = process.env.REDIS_CONNECTION as string
 const REDIS_IP = REDIS_CONNECTION.split(":")[0] as string
-const REDIS_PORT = REDIS_CONNECTION.split(":")[1] as string
+const REDIS_PORT = parseInt(REDIS_CONNECTION.split(":")[1]) as number
 
 
 //Set bot intents
@@ -74,8 +76,6 @@ for(const eventFile of subEventFolder){
 //Login the bot
 client.login(TOKEN)
 export { client }
-
-
 process.on("SIGINT" || "SIGTERM", () => {
   console.log("Shutting down")
   client.destroy()
