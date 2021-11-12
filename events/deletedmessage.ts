@@ -24,6 +24,6 @@ module.exports = {
           channelData.splice(i, 1)
         }
       }
-    }, 10000)
+    }, 30000)
   }
 }

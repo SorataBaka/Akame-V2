@@ -43,6 +43,7 @@ export interface messageEditHeader{
 
 export interface ClientFunctionInterface {
   generateColor:Function
+  getprefix:Function
 }
 export interface ClientCollectionsInterface {
   deleteSnipes:Collection<string, messageDeleteHeader[]>
@@ -51,6 +52,8 @@ export interface ClientCollectionsInterface {
 export interface ClientDatabaseInterface {
   guildData:Model
   RedisClient:RedisClient
+  getAsync:Function
+  setAsync:function
 }
 export interface ClientExtensionInterface extends Client{
   MessageCommands:Collection<string, Command>
@@ -60,4 +63,5 @@ export interface ClientExtensionInterface extends Client{
   ClientFunction:ClientFunctionInterface
   ClientCollection:ClientCollectionsInterface
   ClientDatabase:ClientDatabaseInterface
+  INVITE_LINK:string
 }

@@ -4,10 +4,11 @@ module.exports = {
   name: "commandhandler",
   eventName: "messageCreate",
   async execute(message:Message, client:ClientExtensionInterface) {
+    const prefix = await client.ClientFunction.getprefix(client, message.guild?.id) || client.PREFIX
     if (message.author.bot) return;
-    if (message.content.indexOf(client.PREFIX) !== 0) return;
+    if (message.content.indexOf(prefix) !== 0) return;
 
-    let args:string[] | string = message.content.slice(client.PREFIX.length).trim().split(/ +/g);
+    let args:string[] | string = message.content.slice(prefix.length).trim().split(/ +/g);
     const commandName = args[0].toLowerCase();
 
     if(!client.MessageCommands.has(commandName)) return message.reply("I can't seem to find this command! Are you sure you typed it correctly?")
@@ -17,6 +18,6 @@ module.exports = {
     if(command.args == "single"){
       args = args.join(" ")
     }
-    command.execute(message, args, client) 
+    return command.execute(message, args, client) 
   }
 }

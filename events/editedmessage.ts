@@ -30,6 +30,6 @@ module.exports = {
           channelEditData.splice(i, 1)
         }
       }
-    }, 10000)
+    }, 30000)
   }
 }

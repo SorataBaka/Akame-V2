@@ -20,7 +20,6 @@ const REDIS_CONNECTION = process.env.REDIS_CONNECTION as string
 const REDIS_IP = REDIS_CONNECTION.split(":")[0] as string
 const REDIS_PORT = parseInt(REDIS_CONNECTION.split(":")[1]) as number
 
-
 //Set bot intents
 const intents:Intents = new Intents()
 intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES)
@@ -34,6 +33,7 @@ export default class ClientExtension extends Client implements ClientExtensionIn
   public ClientCollection:ClientCollectionsInterface
   public ClientDatabase:ClientDatabaseInterface
   public PREFIX = process.env.PREFIX as string
+  public INVITE_LINK = process.env.INVITE_LINK as string || "No invite link provided"
   public constructor(intents:Intents) {
       super({ intents: intents })
       this.MessageCommands = new Collection()
