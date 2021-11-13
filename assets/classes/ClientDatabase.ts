@@ -1,10 +1,12 @@
 import mongoose, { Model } from "mongoose"
 import redis from "redis"
 import { ClientDatabaseInterface } from "../../types";
-import guildschema from "../schema/guildschema";
+import guildschema from "../schema/guildschema"
+import messagereaction from "../schema/messagereaction"
 import { promisify } from "util"
 export default class DatabasesClass implements ClientDatabaseInterface {
   public guildData:Model<any> = guildschema
+  public messageReaction:Model<any> = messagereaction
   public RedisClient
   public getAsync
   public setAsync
@@ -22,7 +24,8 @@ export default class DatabasesClass implements ClientDatabaseInterface {
     })
     this.RedisClient = redis.createClient({
       host: redisIP,
-      port: redisPORT
+      port: redisPORT,
+      no_ready_check: true
     })
     this.RedisClient.on("connect", () => {
       console.log("Established stream to Redis Database server")

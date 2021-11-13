@@ -5,7 +5,8 @@
     "dotenv": "^10.0.0",
     "fs": "^0.0.1-security",
     "mongoose": "^6.0.12",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "shortid": "^2.2.16"
   },
   "name": "akame-v2",
   "version": "1.0.0",
@@ -25,5 +26,8 @@
     "nodejs"
   ],
   "author": "Christian Harjuno (SorataBaka)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/shortid": "^0.0.29"
+  }
 }
