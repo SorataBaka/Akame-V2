@@ -29,7 +29,7 @@ module.exports = {
       return false
     })
     
-    const rediswrite = await client.ClientDatabase.setAsync(`boostrole:${message.guild.id}`, roleid)
+    const rediswrite = await client.ClientDatabase.setAsync(`boostrole:${message.guild.id}`, roleid).catch()
     if(mongooseWrite && rediswrite == "OK") {
       return message.reply(`I have set the booster role of this server to ` + "`" + roledata + "`!!!")
     }

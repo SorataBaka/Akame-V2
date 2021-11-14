@@ -10,8 +10,7 @@ module.exports = {
     for(const reactions of reactionList){
       const testExpression = reactions.trigger
       const regex = new RegExp(testExpression,"i")
-      console.log(regex)
       if(regex.test(message.content)) return message.channel.send(reactions.reaction)
-    } 
+    }
   }
 };

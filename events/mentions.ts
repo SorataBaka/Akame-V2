@@ -5,13 +5,8 @@ module.exports = {
   eventName: "messageCreate",
   async execute(message:Message, client:ClientExtensionInterface){
     if(message.mentions.members?.has(client.user?.id as string)){
-      client.ClientDatabase.RedisClient.get(`prefix:${message.guild?.id}`, (err: Error | null, reply: string | null) => {
-        var prefix = client.PREFIX
-        if(reply != null){
-          prefix = reply
-        }
-        message.reply(`Hi! My prefix is ` + "`" + prefix + "`") 
-      })
+      const prefix = await client.ClientFunction.getprefix(client, message.guild?.id) || client.PREFIX
+      return message.reply(`Hi! My prefix is ` + "`" + prefix + "`.")
     }
   }
 };

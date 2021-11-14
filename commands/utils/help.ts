@@ -8,7 +8,7 @@ module.exports = {
   commandGroup: "Utils",
   commandGroupName: "help",
   async execute(message: Message, args: string[] | string, client: ClientExtensionInterface) {
-    const prefix:string = client.PREFIX as string
+    const prefix:string = client.PREFIX || await client.ClientFunction.getprefix(client, message.guild?.id) 
     const botName:string = client.user?.username as string
     const botTag:string = client.user?.tag as string
     const botImage:string = client.user?.avatarURL() as string
@@ -16,7 +16,7 @@ module.exports = {
       const helpEmbed:MessageEmbed = new MessageEmbed()
       .setTitle(`Help module for ${botName} Discord Bot.`)
       .setDescription(`Welcome to the help module for ${botName} Discord Bot! Here you will find the list of commands that i may offer. If there seems to by a problem, Please contact an admin! Enjoy <3`)
-      .addField("Usage: ","`" + `${await client.ClientFunction.getprefix(client, message.guild?.id)} {command name}` + "`")
+      .addField("Usage: ","`" + `${prefix} {command name}` + "`")
       .setAuthor(botTag)
       .setThumbnail(botImage)
       .setTimestamp()

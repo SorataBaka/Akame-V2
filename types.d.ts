@@ -52,6 +52,7 @@ export interface ClientCollectionsInterface {
 export interface ClientDatabaseInterface {
   guildData:Model
   messageReaction:Model
+  boostertoken:Model
   RedisClient:RedisClient
   getAsync:Function
   setAsync:function
