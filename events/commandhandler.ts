@@ -4,6 +4,7 @@ module.exports = {
   name: "commandhandler",
   eventName: "messageCreate",
   async execute(message:Message, client:ClientExtensionInterface) {
+    if(message.member?.user.bot) return
     const prefix = await client.ClientFunction.getprefix(client, message.guild?.id) || client.PREFIX
     if (message.author.bot) return;
     if (message.content.indexOf(prefix) !== 0) return;
