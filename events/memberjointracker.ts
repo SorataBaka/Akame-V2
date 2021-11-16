@@ -16,15 +16,16 @@ module.exports = {
     const memberregister:string = member.user.createdAt?.toLocaleString("id-ID", {timeZone: "Asia/Jakarta"}) as string
     const memberjoin:string = member.joinedAt?.toLocaleString("id-ID", {timeZone: "Asia/Jakarta"}) as string
     // const embed = new MessageEmbed()
-    //   .addField("User Tag:", membertag)
-    //   .addField("Username: ", memberusername)
-    //   .addField("Registered At: ", memberregister)
-    //   .addField("Member Joined: ", memberjoin)
+    //   .addField("Username: ", memberusername, true)
+    //   .addField("User Tag:", membertag, true)
+    //   .addField("Registered At: ", memberregister, true)
+    //   .addField("Member Joined: ", memberjoin, true)
+    //   .addField("ID: ", member.id, true)
     //   .setTimestamp()
     //   .setColor(await client.ClientFunction.generateColor())
     // return (member.guild.channels.cache.get(logchannel) as TextChannel).send({
     //   embeds: [embed]
     // }).catch((err) => console.log(err))
-    return (member.guild.channels.cache.get(logchannel) as TextChannel)?.send(`| ${membertag} | ${memberusername} | Registered : ` + "`" + `${memberregister} ` + "`" + ` | Joined: ` + "`" + `${memberjoin}` + "`" + ` | ID: ` + "`" + `${member.id}` + "`" + ` `).catch()
+    return (member.guild.channels.cache.get(logchannel) as TextChannel)?.send(`| ${memberusername} | ${membertag} | Registered : ` + "`" + `${memberregister} ` + "`" + ` | Joined: ` + "`" + `${memberjoin}` + "`" + ` | ID: ` + "`" + `${member.id}` + "`" + ` `).catch()
   }
 };
