@@ -22,5 +22,21 @@ module.exports = {
         }
       ]
     })
+    setInterval(async() => {
+      const newguild = client.guilds
+      const newusers = client.users
+      const newGuildCount = newguild.cache.size;
+      const newUserCount  = newusers.cache.size;
+      user?.setActivity(`${newGuildCount} servers | ${newUserCount} members`, { type: "WATCHING" });
+      user?.setStatus("dnd");
+      user?.setPresence({
+        activities: [
+          {
+            name: `${newGuildCount} servers | ${newUserCount} members`,
+            type: "WATCHING"
+          }
+        ]
+      })
+    }, 60000)
   }
 };
