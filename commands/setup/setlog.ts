@@ -1,28 +1,25 @@
 import { Message } from "discord.js"
 import { ClientExtensionInterface } from "../../types"
 module.exports = {
-  name: "setboost",
-  description: "Sets the boost role for the server.",
-  usage: "setboost {role id}",
+  name: "setlog",
+  description: "Sets the log channel for the server.",
+  usage: "setlog {tag the channel}",
   args: "multiple",
   commandGroup: "Setups",
-  commandGroupName: "setboost",
+  commandGroupName: "setlog",
   async execute(message:Message, args:string[]|string, client:ClientExtensionInterface){
     if(!message.member?.permissions.has("MANAGE_GUILD")) return message.reply("You do not have the permission to use this command!")
-    if(args.length == 0) return message.reply("Please provide the role id of your booster role!")
-    const roleid:string = args[0]
+    if(!message.mentions.channels.first()) return message.reply("Please tag a channel!")
     //Verify if the role exists in the guild
-    if(!message.guild?.roles.cache.has(roleid)) return message.reply("The role you provided doesn't exist in the guild!")
-    const roledata = message.guild.roles.cache.get(roleid)?.name
-
+    const channelid = message.mentions.channels.first()?.id as string
+    const channelname = message.guild?.channels.cache.get(channelid)?.name
     const guilddata = client.ClientDatabase.guildData
     var mongooseWrite = await guilddata.findOneAndUpdate({
-      guildID:message.guild.id,
+      guildID:message.guild?.id,
     }, {
-      guildID:message.guild.id,
+      guildID:message.guild?.id,
       $set: {
-        boosterRoleID: roleid,
-        boostRoleLimit: 20
+        logChannelID: channelid
       }
     }, {
       upsert:true
@@ -33,9 +30,9 @@ module.exports = {
       return false
     })
     
-    const rediswrite = await client.ClientDatabase.setAsync(`boostrole:${message.guild.id}`, roleid).catch()
+    const rediswrite = await client.ClientDatabase.setAsync(`logchannel:${message.guild?.id}`, channelid).catch()
     if(mongooseWrite && rediswrite == "OK") {
-      return message.reply(`I have set the booster role of this server to ` + "`" + roledata + "`!!!")
+      return message.reply(`I have set the log channel of this server to ` + "`" + channelname + "`!!!")
     }
   }
 }
