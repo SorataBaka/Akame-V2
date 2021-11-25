@@ -11,6 +11,7 @@ module.exports = {
       const query = await client.ClientDatabase.guildData.find({guildID: oldMember.guild.id})
       if(query.length == 0 || !query[0].boosterRoleID) return
       boostroleid = query[0].boosterRoleID
+      await client.ClientDatabase.setAsync(`boostrole:${oldMember.guild.id}`, query[0].boosterRoleID).catch()
     }
     if(!oldMember.roles.cache.has(boostroleid) && newMember.roles.cache.has(boostroleid)){
       const token:string = generate()

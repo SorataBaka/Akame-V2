@@ -1,5 +1,5 @@
-// import { Message, MessageEmbed } from 'discord.js';
-// import { ClientExtensionInterface } from "../../types"
+// import { Message, MessageEmbed, TextChannel, Collection } from 'discord.js';
+// import { ClientExtensionInterface } from "../types"
 // module.exports = {
 //   name: "claimrole",
 //   description: "Claims a role",
@@ -8,6 +8,7 @@
 //   commandGroup: "Booster",
 //   commandGroupName: "claimrole",
 //   async execute(message: Message, args: string[] | string, client: ClientExtensionInterface){
+    
 //     var boostroleid = await client.ClientDatabase.getAsync(`boostrole:${message.guild?.id}`)
 //     if(!boostroleid){
 //       const guildquery = await client.ClientDatabase.guildData.find({guildID: message.guild?.id})
@@ -24,6 +25,10 @@
 //     if(query.length == 0 || query[0].memberid != memberid || query[0].token != token){
 //       return message.reply("I'm sorry, it seems like your token is invalid or you are not a registered booster! Please contact an admin if you need help.")
 //     }
+//     var rolename:string;
+//     var rolecolor:string;
+//     var roleicon:string;
+//     const channel:TextChannel = message.channel as TextChannel
 //     const roleNameEmbed = new MessageEmbed()
 //       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
 //       .setTitle("Please provide a role name! This will be the name of the role you are creating.")
@@ -53,5 +58,63 @@
 //       .setTimestamp()
 //       .setFooter("Type `cancel` to abort role creation!")
 //       .setColor(await client.ClientFunction.generateColor())
+    
+//     const roleNameFunction = async():Promise<any>=> {
+//       const rolenamemessage = await message.channel.send({
+//         embeds: [roleNameEmbed]
+//       })
+//       const roleNameInput:Collection<string, Message> = await channel.awaitMessages({
+//         max: 1,
+//         filter: (n) => n.author.id == message.member?.id,
+//         time: 60000 
+//       }).catch((err) => {return message.reply("You have timed out! Please try again.")}) as Collection<string, Message>
+//       await rolenamemessage.delete()
+//       if(roleNameInput.size == 0 || !roleNameInput.first()?.content){
+//         message.reply("You need to provide a role name! Please try again")
+//         return roleNameFunction()
+//       }
+//       if(roleNameInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
+//       rolename = roleNameInput.first()?.content as string
+//       return roleColorFunction()
+//     }
+//     const roleColorFunction = async():Promise<any>=> {
+//       const rolecolormessage = await message.channel.send({
+//         embeds: [roleColorEmbed]
+//       })
+//       const roleColorInput:Collection<string, Message> = await channel.awaitMessages({
+//         max: 1,
+//         filter: (n) => n.author.id == message.member?.id,
+//         time: 60000 
+//       }).catch((err) => {return message.reply("You have timed out! Please try again.")}) as Collection<string, Message>
+//       await rolecolormessage.delete()
+//       if(roleColorInput.size == 0 || !roleColorInput.first()?.content){
+//         message.reply("You need to provide a role color! Please try again")
+//         return roleNameFunction()
+//       }
+//       if(roleColorInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
+//       rolecolor = roleColorInput.first()?.content as string
+//       if(!rolecolor.startsWith("#")){
+//         rolecolor = "#"+rolecolor
+//       }
+//       return roleIconFunction()
+//     }
+//     const roleIconFunction = async():Promise<any>=> {
+//       const roleiconmessage = await message.channel.send({
+//         embeds: [roleIconEmbed]
+//       })
+//       const roleIconInput:Collection<string, Message> = await channel.awaitMessages({
+//         max: 1,
+//         filter: (n) => n.author.id == message.member?.id,
+//         time: 60000 
+//       }).catch((err) => {return message.reply("You have timed out! Please try again.")}) as Collection<string, Message>
+//       await roleiconmessage.delete()
+//       if(roleIconInput.size == 0 || !roleIconInput.first()?.content){
+//         message.reply("You need to provide a role name! Please try again")
+//         return roleNameFunction()
+//       }
+//     }
+
+
+//     await roleNameFunction()
 //   }
 // }

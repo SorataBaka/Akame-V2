@@ -9,6 +9,7 @@ module.exports = {
       const query = await client.ClientDatabase.guildData.find({guildID: member.guild.id})
       if(query.length == 0 || !query[0].logChannelID) return
       logchannel = query[0].logChannelID
+      await client.ClientDatabase.setAsync(`logchannel:${member.guild.id}`, query[0].logChannelID)
     }
     if(!logchannel) return console.log("Channel not found")
     const membertag:string = member.user.tag
