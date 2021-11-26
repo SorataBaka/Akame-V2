@@ -28,6 +28,6 @@ module.exports = {
       .setTimestamp()
     return message.channel.send({
       embeds: [snipeEmbed]
-    })
+    }).catch()
   }
 }

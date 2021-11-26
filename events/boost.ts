@@ -27,7 +27,7 @@ module.exports = {
       }, {
         upsert: true
       }).catch((err:void) => {
-        return oldMember.send("Hi! this is the automated custom role system. Unfortunately, we are experiencing issues with the system. To claim your free role, please dm one of the staffs to claim it!")
+        return oldMember.send("Hi! this is the automated custom role system. Unfortunately, we are experiencing issues with the system. To claim your free role, please dm one of the staffs to claim it!").catch()
       })
       if(write){
         const tokenEmbed = new MessageEmbed()

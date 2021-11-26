@@ -28,7 +28,7 @@ module.exports = {
     if(snipeData.image != null) snipeEmbed.setImage(snipeData.image)
     return message.channel.send({
       embeds: [snipeEmbed]
-    })
+    }).catch()
 
      
     

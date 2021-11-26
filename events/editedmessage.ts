@@ -1,9 +1,18 @@
 import { Message, Collection } from "discord.js"
 import { ClientExtensionInterface, messageEditHeader } from "../types"
+import fs from "fs"
 module.exports = {
   name: "edithandler",
   eventName: "messageUpdate",
   async execute(oldMessage:Message, newMessage:Message,  client:ClientExtensionInterface){
+    const wordList = fs.readFileSync(__dirname + "/../assets/JSON/words.json")
+    const wordListJSON:string[] = JSON.parse(wordList.toString())
+    for(const words of wordListJSON){
+      const regexExpression = new RegExp(words, "i")
+      if(regexExpression.test(oldMessage.content)){
+        return
+      }
+    }
     const channelid = oldMessage.channel.id
     const author = oldMessage.author.tag
     const member = oldMessage.member

@@ -11,7 +11,7 @@ module.exports = {
   commandGroup: "Dev",
   commandGroupName: "regword",
   async execute(message: Message, args: string[] | string, client: ClientExtensionInterface){
-    if(!message.member?.permissions.has("MANAGE_GUILD")) return message.reply("You do not have the permission to use this command!")
+    if(!message.member?.permissions.has("MANAGE_MESSAGES")) return message.reply("You do not have the permission to use this command!")
     if(args.length == 0 || args === undefined) return message.reply("No arguments provided")
     var sentence = args as string
     var words = JSON.parse(fs.readFileSync(staticPath, "utf8"))
