@@ -25,6 +25,6 @@ module.exports = {
     // return (member.guild.channels.cache.get(logchannel) as TextChannel).send({
     //   embeds: [embed]
     // }).catch((err) => console.log(err))
-    return (member.guild.channels.cache.get(logchannel) as TextChannel)?.send(`| ${memberusername} | Registered : ` + "`" + `${memberregister} ` + "`" + ` | ID: ` + "`" + `${member.id}` + "`" + ` `).catch()
+    return (member.guild.channels.cache.get(logchannel) as TextChannel)?.send(`Registered : ` + "`" + `${memberregister} ` + "`" + ` | ID: ` + "`" + `${member.id}` + "`" + `| ${memberusername} | `).catch()
   }
 };
