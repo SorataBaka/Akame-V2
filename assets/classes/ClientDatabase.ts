@@ -4,11 +4,13 @@ import { ClientDatabaseInterface } from "../../types";
 import guildschema from "../schema/guildschema"
 import messagereaction from "../schema/messagereaction"
 import boostertoken from "../schema/boostertoken"
+import boosterrole from "../schema/boostroles"
 import { promisify } from "util"
 export default class DatabasesClass implements ClientDatabaseInterface {
   public guildData:Model<any> = guildschema
   public messageReaction:Model<any> = messagereaction
   public boostertoken:Model<any> = boostertoken
+  public boosterroles:Model<any> = boosterrole
   public RedisClient
   public getAsync
   public setAsync
