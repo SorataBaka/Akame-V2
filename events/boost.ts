@@ -16,6 +16,10 @@ module.exports = {
     const memberid:string = oldMember.id
     const guildid:string = oldMember.guild.id
     if(!oldMember.roles.cache.has(boostroleid) && newMember.roles.cache.has(boostroleid)){
+      const roleQuery = await client.ClientDatabase.boosterroles.find({guildID: guildid, memberID: memberid})
+      if(roleQuery.length != 0) return
+      const tokenQuery = await client.ClientDatabase.boostertoken.find({guildid: guildid, memberid: memberid})
+      if(tokenQuery.length != 0) return
       const token:string = generate()
       const write = await client.ClientDatabase.boostertoken.findOneAndUpdate({
         guildid: guildid,
