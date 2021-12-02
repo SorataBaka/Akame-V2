@@ -11,23 +11,28 @@ module.exports = {
   commandGroup: "Booster",
   commandGroupName: "claimrole",
   async execute(message: Message, args: string[] | string, client: ClientExtensionInterface){
-    
     var boostroleid = await client.ClientDatabase.getAsync(`boostrole:${message.guild?.id}`)
     if(!boostroleid){
       const guildquery = await client.ClientDatabase.guildData.find({guildID: message.guild?.id})
       if(guildquery.length == 0 || !guildquery[0].boosterRoleID) return message.reply("It seems like this server is not configured to handle custom boost roles yet. Please contact an admin and try again later!")
       boostroleid = guildquery[0].boosterRoleID
+      await client.ClientDatabase.setAsync(`boostrole:${message.guild?.id}`, boostroleid)
     }
-    if(!message.member?.roles.cache.has(boostroleid)) return message.reply("Hi! It seems like you are not a booster of this server. You're not allowed to use this command!")
-    
+    if(!message.guild?.roles.cache.has(boostroleid)) return message.reply("It seems like the boost role in this server has been deleted. Please contact an admin.")
+    // if(!message.member?.roles.cache.has(boostroleid)) return message.reply("Hi! It seems like you are not a booster of this server. You're not allowed to use this command!")
     if(args.length == 0) return message.reply("Please provide a token to use this command!")
+
     const memberid:string = message.member?.id as string
     const guildid:string = message.guild?.id as string
     const token:string = args[0] as string
+
     const query = await client.ClientDatabase.boostertoken.find({guildid: guildid, memberid: memberid})
     if(query.length == 0 || query[0].memberid != memberid || query[0].token != token){
       return message.reply("I'm sorry, it seems like your token is invalid or you are not a registered booster! Please contact an admin if you need help.")
     }
+    const rolequery = await client.ClientDatabase.boosterroles.find({guildID: guildid, memberID: memberid})
+    if(rolequery.length != 0) return message.reply("It seems like you already have a role created in this server. The maximum amount of owned roles per booster is only 1!")
+
     var rolename:string;
     var rolecolor:any;
     var roleicon:Buffer;
@@ -44,6 +49,7 @@ module.exports = {
       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
       .setTitle("Please provide a role color! This will be the color of the role you are creating.")
       .setDescription("You won't be able to change this in the future so make sure you choose correctly!")
+      .addField('Search HEX code here:', "https://htmlcolorcodes.com/")
       .setTimestamp()
       .setFooter("Type `cancel` to abort role creation!")
       .setColor(await client.ClientFunction.generateColor())
@@ -71,9 +77,8 @@ module.exports = {
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
         time: 60000 
-      }).catch((err) => {
-        return message.reply("You have timed out! Please try again.")
-      }) as Collection<string, Message>
+      }).catch() as Collection<string, Message>
+      if(!roleNameInput) return message.reply("You have timed out! Please try again.")
       await rolenamemessage.delete()
       if(roleNameInput.size == 0 || !roleNameInput.first()?.content){
         message.reply("You need to provide a role name! Please try again")
@@ -93,7 +98,8 @@ module.exports = {
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
         time: 60000 
-      }).catch((err) => {return message.reply("You have timed out! Please try again.")}) as Collection<string, Message>
+      }).catch() as Collection<string, Message>
+      if(!roleColorInput) return message.reply("You have timed out! Please try again.")
       await rolecolormessage.delete()
       if(roleColorInput.size == 0 || !roleColorInput.first()?.content){
         message.reply("You need to provide a role color! Please try again")
@@ -112,6 +118,7 @@ module.exports = {
       rolecolor = rgbArray
       return roleIconFunction()
     }
+
     const roleIconFunction = async():Promise<any>=> {
       var tempRoleURL:string
       const roleiconmessage = await message.channel.send({
@@ -121,7 +128,8 @@ module.exports = {
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
         time: 60000 
-      }).catch((err) => {return message.reply("You have timed out! Please try again.")}) as Collection<string, Message>
+      }).catch() as Collection<string, Message>
+      if(!roleIconInput) return message.reply("You have timed out! Please try again.")
       await roleiconmessage.delete()
       if(roleIconInput.size == 0){
         message.reply("You need to provide a role name! Please try again")
@@ -131,6 +139,7 @@ module.exports = {
       if(roleIconInput.first()?.attachments.first()){
         tempRoleURL = roleIconInput.first()?.attachments.first()?.url as string
       }else if(roleIconInput.first()?.content){
+        //Something wrong with this part
         if(!roleIconInput.first()?.content.endsWith(".png" || ".jpg" || ".jpeg")){
           await message.reply("Please provide a valid image url! Please try again")
           return roleIconFunction()
@@ -144,7 +153,7 @@ module.exports = {
         url: tempRoleURL,
         method: "GET",
         responseType: "arraybuffer"
-      })
+      }).catch()
       if(!imageBuffer) return message.reply("There seems to be a problem creating your role. Please contact an admin or try again later!")
       const newImageBuffer = await resizeImage(imageBuffer.data, {
         width: 64
@@ -162,9 +171,7 @@ module.exports = {
         position: rolePosition + 1,
         icon: roleicon,
         reason: `Role Creation by ${message.author.tag}`
-      }).catch((err) => {
-        console.log(err)
-      }) as Role
+      }).catch() as Role
       if(role){
         newRoleData = role
         await message.member?.roles.add(role).catch(err => {
@@ -184,9 +191,8 @@ module.exports = {
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
         time: 60000 
-      }).catch((err) => {
-        return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
+      if(!roleConfirmationInput) return message.reply("You have timed out! Please try again.")
       await roleconfirmationmessage.delete()
       if(roleConfirmationInput.size == 0 || !roleConfirmationInput.first()?.content){
         message.reply("Invalid message! Please only type either 'confirm' or 'cancel'!")
@@ -214,7 +220,7 @@ module.exports = {
         upsert: true
       }).catch(async(err:any) => {
         await message.reply("I'm sorry, but it seems like i am experiencing an error! Please try again.").catch()
-        return message.guild?.roles.cache.get(boostroleid)?.delete().catch()
+        return newRoleData.delete().catch()
       })
       await client.ClientDatabase.boostertoken.findOneAndDelete({guildid: message.guild?.id, memberid: message.member?.id}).catch()
       return message.reply(`I have created the role ${newRoleData.name} for you!`).catch()

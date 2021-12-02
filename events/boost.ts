@@ -13,10 +13,10 @@ module.exports = {
       boostroleid = query[0].boosterRoleID
       await client.ClientDatabase.setAsync(`boostrole:${oldMember.guild.id}`, query[0].boosterRoleID).catch()
     }
+    const memberid:string = oldMember.id
+    const guildid:string = oldMember.guild.id
     if(!oldMember.roles.cache.has(boostroleid) && newMember.roles.cache.has(boostroleid)){
       const token:string = generate()
-      const memberid:string = oldMember.id
-      const guildid:string = oldMember.guild.id
       const write = await client.ClientDatabase.boostertoken.findOneAndUpdate({
         guildid: guildid,
         memberid: memberid
@@ -32,7 +32,7 @@ module.exports = {
       if(write){
         const tokenEmbed = new MessageEmbed()
           .setThumbnail(client.user?.avatarURL() as string)
-          .setAuthor(`Thank you so much for boosting the server ${oldMember.user.username}!!!`)
+          .setAuthor(`Thank you so much for boosting the server ${oldMember.guild.name}!!!`)
           .setTitle('You will be eligible to claim a free custom role from your boost!')
           .setDescription(`To claim your free role, please enter the claim role command i have provided in the server you boosted. `)
           .addField("Your token is : ", "`" + `*${token}*`+ "`")
@@ -42,8 +42,30 @@ module.exports = {
           .setFooter("Please contact an admin for futher details!")
         return oldMember.send({
           embeds: [tokenEmbed]
-        }).catch()
+        }).catch((err:any) => {
+          console.error(err)
+        })
       }
+    }
+    if(oldMember.roles.cache.has(boostroleid) && !newMember.roles.cache.has(boostroleid)){
+      await client.ClientDatabase.boostertoken.findOneAndDelete({guildid: guildid, memberid: memberid})
+      const query = await client.ClientDatabase.boosterroles.find({guildID: guildid, memberID: memberid})
+      if(query.length == 0) return
+      const customroleid = query[0].roleID
+      await oldMember.guild.roles.cache.get(customroleid)?.delete().catch()
+      await client.ClientDatabase.boosterroles.findOneAndDelete({guildID: guildid, memberID: memberid}).catch()
+      
+      const expiredEmbed = new MessageEmbed()
+        .setThumbnail(client.user?.avatarURL() as string)
+        .setAuthor(`Your boost in the server ${oldMember.guild?.name as string} has expired.`)
+        .setDescription(`Any available tokens in your name has been deleted and any custom roles created will be deleted. To create a new custom roles, please re-boost the server!`)
+        .setTimestamp()
+        .setColor(await client.ClientFunction.generateColor())
+        .setFooter("Please contact an admin for further details!")
+      return oldMember.send({
+        embeds: [expiredEmbed]
+      }).catch()
+
     }
   }
 }
