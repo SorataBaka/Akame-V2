@@ -40,7 +40,7 @@ module.exports = {
     const channel:TextChannel = message.channel as TextChannel
     const roleNameEmbed = new MessageEmbed()
       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
-      .setTitle("Please provide a role name! This will be the name of the role you are creating.")
+      .setTitle("Please type a role name! This will be the name of the role you are creating.")
       .setDescription("You won't be able to change this in the future so make sure you choose correctly!")
       .setTimestamp()
       .setFooter("Type `cancel` to abort role creation!")
@@ -48,7 +48,7 @@ module.exports = {
     const roleColorEmbed = new MessageEmbed()
       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
       .setTitle("Please provide a role color! This will be the color of the role you are creating.")
-      .setDescription("You won't be able to change this in the future so make sure you choose correctly!")
+      .setDescription("You won't be able to change this in the future so make sure you choose correctly! Type a hex value (ex: #F0KSFH). If you don't know what color to choose, simply visit the link provided before and paste the given hex code in to this channel.")
       .addField('Search HEX code here:', "https://htmlcolorcodes.com/")
       .setTimestamp()
       .setFooter("Type `cancel` to abort role creation!")
@@ -57,54 +57,47 @@ module.exports = {
       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
       .setTitle("Please provide a role icon! This will be the icon of the role you are creating.")
       .setDescription("You won't be able to change this in the future so make sure you choose correctly!")
-      .addField("Disclaimer!", "Please only provide a url source or an image for the icon. If the format of the image is other than png or jpeg, it will not work!`")
+      .addField("Disclaimer!", "Please only send an image for the icon. If the format of the image is other than png or jpeg, it will not work!")
       .setTimestamp()
       .setFooter("Type `cancel` to abort role creation!")
       .setColor(await client.ClientFunction.generateColor())
     const confirmationEmbed = new MessageEmbed()
       .setAuthor(`-${client.user?.username}`, client.user?.avatarURL() as string)
       .setTitle("Please preview the role you just created!")
-      .setDescription("Once you are satisfied, type `confirm` to finish role creation!")
+      .setDescription("I have created the role and given it to you. You can check the role in your profile. Once you are satisfied, type `confirm` to finish role creation! Otherwise, if you would like to change it, type `cancel` and try again!")
       .setTimestamp()
       .setFooter("Type `cancel` to abort role creation!")
       .setColor(await client.ClientFunction.generateColor())
     
     const roleNameFunction = async():Promise<any>=> {
-      const rolenamemessage = await message.channel.send({
+      const rolenamemessage = await message.reply({
         embeds: [roleNameEmbed]
       })
       const roleNameInput:Collection<string, Message> = await channel.awaitMessages({
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
-        time: 60000 
-      }).catch() as Collection<string, Message>
-      if(!roleNameInput) return message.reply("You have timed out! Please try again.")
+        time: 30000 
+      }).catch((err:any)=>{
+        return message.reply("You have timed out! Please try again.")
+      }) as Collection<string, Message>
       await rolenamemessage.delete()
-      if(roleNameInput.size == 0 || !roleNameInput.first()?.content){
-        message.reply("You need to provide a role name! Please try again")
-        return roleNameFunction()
-      }
+      if(roleNameInput.size == 0 || !roleNameInput.first()?.content) return message.reply("You have timed out! Please try again.")
       if(roleNameInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       rolename = roleNameInput.first()?.content as string
       return roleColorFunction()
     }
-
-
     const roleColorFunction = async():Promise<any> => {
-      const rolecolormessage = await message.channel.send({
+      const rolecolormessage = await message.reply({
         embeds: [roleColorEmbed]
       })
       const roleColorInput:Collection<string, Message> = await channel.awaitMessages({
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
-        time: 60000 
-      }).catch() as Collection<string, Message>
-      if(!roleColorInput) return message.reply("You have timed out! Please try again.")
+        time: 30000 
+      }).catch((err:any)=>{ return message.reply("You have timed out! Please try again.")
+      }) as Collection<string, Message>
       await rolecolormessage.delete()
-      if(roleColorInput.size == 0 || !roleColorInput.first()?.content){
-        message.reply("You need to provide a role color! Please try again")
-        return roleColorFunction()
-      }
+      if(roleColorInput.size == 0 || !roleColorInput.first()?.content) return message.reply("You have timed out! Please try again.")
       if(roleColorInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       const colorString:string = roleColorInput.first()?.content as string
       const regexString = new RegExp('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')
@@ -121,20 +114,18 @@ module.exports = {
 
     const roleIconFunction = async():Promise<any>=> {
       var tempRoleURL:string
-      const roleiconmessage = await message.channel.send({
+      const roleiconmessage = await message.reply({
         embeds: [roleIconEmbed]
       })
       const roleIconInput:Collection<string, Message> = await channel.awaitMessages({
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
-        time: 60000 
-      }).catch() as Collection<string, Message>
-      if(!roleIconInput) return message.reply("You have timed out! Please try again.")
+        time: 30000 
+      }).catch((err:any)=>{
+        return message.reply("You have timed out! Please try again.")
+      }) as Collection<string, Message>
       await roleiconmessage.delete()
-      if(roleIconInput.size == 0){
-        message.reply("You need to provide a role name! Please try again")
-        return roleIconFunction()
-      }
+      if(roleIconInput.size == 0) return message.reply("You have timed out! Please try again.")
       if(roleIconInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       if(roleIconInput.first()?.attachments.first()){
         tempRoleURL = roleIconInput.first()?.attachments.first()?.url as string
@@ -146,7 +137,7 @@ module.exports = {
         }
         tempRoleURL = roleIconInput.first()?.content as string
       }else{
-        await message.reply("Please provide a valid image! try again")
+        await message.reply("Please provide a valid image! Try again!")
         return roleIconFunction()
       }
       const imageBuffer = await axios.request({
@@ -184,19 +175,21 @@ module.exports = {
       }
     }
     const roleConfirmation = async():Promise<any> => {
-      const roleconfirmationmessage = await message.channel.send({
+      const roleconfirmationmessage = await message.reply({
         embeds: [confirmationEmbed]
       })
       const roleConfirmationInput:Collection<string, Message> = await channel.awaitMessages({
         max: 1,
         filter: (n) => n.author.id == message.member?.id,
-        time: 60000 
+        time: 30000 
+      }).catch(async(err:any)=>{
+        await newRoleData.delete().catch()
+        return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
-      if(!roleConfirmationInput) return message.reply("You have timed out! Please try again.")
       await roleconfirmationmessage.delete()
       if(roleConfirmationInput.size == 0 || !roleConfirmationInput.first()?.content){
-        message.reply("Invalid message! Please only type either 'confirm' or 'cancel'!")
-        return roleConfirmation()
+        await newRoleData.delete().catch()
+        return message.reply("You have timed out! Please try again.")
       }
       if(roleConfirmationInput.first()?.content.toUpperCase() == "CANCEL"){
         return roleCancel()

@@ -48,6 +48,7 @@ export interface ClientFunctionInterface {
 export interface ClientCollectionsInterface {
   deleteSnipes:Collection<string, messageDeleteHeader[]>
   editSnipes:Collection<string, messageEditHeader[]>
+  activeCommand:Collection<string, GuildMember>
 }
 export interface ClientDatabaseInterface {
   guildData:Model
