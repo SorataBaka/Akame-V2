@@ -8,13 +8,13 @@ export interface Command {
   args: "single" | "multiple"
   commandGroup: string
   commandGroupName: string
-  execute(message: Message, args: string[]|string, client: Client): void
+  execute(message: Message, args: string[]|string, client: Client):Promise<any>
 }
 export interface Events {
   name: string
   eventName: string
   description: string
-  execute:Function
+  execute:Promise<any>
 }
 export interface messageDeleteContent {
   content:string
