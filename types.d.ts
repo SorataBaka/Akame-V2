@@ -14,7 +14,7 @@ export interface Events {
   name: string
   eventName: string
   description: string
-  execute:Promise<any>
+  execute:Function
 }
 export interface messageDeleteContent {
   content:string
