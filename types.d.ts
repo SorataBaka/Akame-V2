@@ -1,6 +1,7 @@
 import { Message, Client, Collection, GuildMember } from 'discord.js';
 import { Model, Mongoose, Schema } from "mongoose"
 import { RedisClient } from 'redis';
+import { EventEmitter } from 'events';
 export interface Command {
   name: string
   description: string
@@ -59,6 +60,9 @@ export interface ClientDatabaseInterface {
   getAsync:Function
   setAsync:function
 }
+export interface ClientAPIInterface extends EventEmitter {
+  client:Express
+}
 export interface ClientExtensionInterface extends Client{
   MessageCommands:Collection<string, Command>
   MessageCommandGroups:Collection<string, Collection<string, Command>>
@@ -67,5 +71,6 @@ export interface ClientExtensionInterface extends Client{
   ClientFunction:ClientFunctionInterface
   ClientCollection:ClientCollectionsInterface
   ClientDatabase:ClientDatabaseInterface
+  ClientAPI:any
   INVITE_LINK:string
 }

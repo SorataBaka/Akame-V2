@@ -1,10 +1,11 @@
 import { Client, Intents, Collection } from "discord.js"
 import { config } from "dotenv"
 
-import { Command, Events, ClientExtensionInterface, ClientFunctionInterface, ClientCollectionsInterface, ClientDatabaseInterface } from "./types"
+import { Command, Events, ClientExtensionInterface, ClientFunctionInterface, ClientCollectionsInterface, ClientDatabaseInterface, ClientAPIInterface } from "./types"
 import ClientFunction from "./assets/classes/ClientFunctions"
 import ClientCollection from "./assets/classes/ClientCollections"
 import ClientDatabase from "./assets/classes/ClientDatabase"
+import ClientAPI from "./assets/classes/ClientAPI"
 import fs from "fs"
 config()
 console.clear()
@@ -30,6 +31,7 @@ export default class ClientExtension extends Client implements ClientExtensionIn
   public ClientFunction:ClientFunctionInterface
   public ClientCollection:ClientCollectionsInterface
   public ClientDatabase:ClientDatabaseInterface
+  public ClientAPI:ClientAPIInterface
   public PREFIX = process.env.PREFIX as string
   public INVITE_LINK = process.env.INVITE_LINK as string || "No invite link provided"
   public constructor(intents:Intents) {
@@ -40,6 +42,7 @@ export default class ClientExtension extends Client implements ClientExtensionIn
       this.ClientFunction = new ClientFunction()
       this.ClientCollection = new ClientCollection()
       this.ClientDatabase = new ClientDatabase(URI, REDIS_URI)
+      this.ClientAPI = new ClientAPI()
   }
 }
 const client:ClientExtension = new ClientExtension(intents)
