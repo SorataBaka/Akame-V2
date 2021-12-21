@@ -60,9 +60,9 @@ export interface ClientDatabaseInterface {
   getAsync:Function
   setAsync:function
 }
-export interface ClientAPIInterface extends EventEmitter {
-  client:Express
-}
+// export interface ClientAPIInterface extends EventEmitter {
+//   client:Express
+// }
 export interface ClientExtensionInterface extends Client{
   MessageCommands:Collection<string, Command>
   MessageCommandGroups:Collection<string, Collection<string, Command>>
@@ -71,6 +71,6 @@ export interface ClientExtensionInterface extends Client{
   ClientFunction:ClientFunctionInterface
   ClientCollection:ClientCollectionsInterface
   ClientDatabase:ClientDatabaseInterface
-  ClientAPI:any
+  // ClientAPI:any
   INVITE_LINK:string
 }
