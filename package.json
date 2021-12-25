@@ -1,9 +1,10 @@
 {
   "dependencies": {
     "@mdhnpm/rgb-hex-converter": "^1.0.3",
+    "@types/axios": "^0.14.0",
     "axios": "^0.24.0",
     "body-parser": "^1.19.1",
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
