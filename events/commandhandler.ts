@@ -8,7 +8,8 @@ module.exports = {
     const prefix = await client.ClientFunction.getprefix(client, message.guild?.id) || client.PREFIX
     if (message.author.bot) return;
     if(!message.content) return;
-    if(message.content.indexOf(prefix) !== 0) return;
+    const temporary = message.content.toUpperCase()
+    if(temporary.indexOf(prefix.toUpperCase()) !== 0) return;
     if(client.ClientCollection.activeCommand.has(message.member?.id as string)) return 
     let args:string[] | string = message.content.slice(prefix.length).trim().split(/ +/g);
     const commandName = args[0].toLowerCase();
