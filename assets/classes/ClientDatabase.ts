@@ -28,7 +28,8 @@ export default class DatabasesClass implements ClientDatabaseInterface {
     })
     this.RedisClient = redis.createClient({
       url: REDIS_URI,
-      no_ready_check: true
+      no_ready_check: true,
+      disable_resubscribing: false
     })
     this.RedisClient.on("connect", () => {
       console.log("Established stream to Redis Database server")
@@ -39,6 +40,11 @@ export default class DatabasesClass implements ClientDatabaseInterface {
     })
     this.RedisClient.on("end", () => {
       console.log("Connection to Redis Database Server has ended")
+      this.RedisClient = redis.createClient({
+        url: REDIS_URI,
+        no_ready_check: true,
+        disable_resubscribing: false
+      })
     })
     this.RedisClient.on("reconnecting", () => {
       console.log("Reconnecting to Redis Database Server")
