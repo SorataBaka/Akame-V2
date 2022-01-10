@@ -13,7 +13,7 @@ module.exports = {
     const currentDate = new Date()
     const timeDifference = currentDate.getTime() - memberJoinedDate.getTime()
     const timeDifferenceInDays = timeDifference / (1000 * 3600 * 24)
-    if(timeDifferenceInDays > 15) return
+    if(timeDifferenceInDays > 4) return
     return message.delete().catch()
   }
 }

@@ -21,7 +21,7 @@ module.exports = {
     const currentDate = new Date()
     const timeDifference = currentDate.getTime() - memberJoinedDate.getTime()
     const timeDifferenceInDays = timeDifference / (1000 * 3600 * 24)
-    if(timeDifferenceInDays < 15){
+    if(timeDifferenceInDays < 4){
       if(message.attachments.size > 0 || message.content.endsWith(".jpg" || ".png" || ".jpeg" || ".heic")){
         return
       }
