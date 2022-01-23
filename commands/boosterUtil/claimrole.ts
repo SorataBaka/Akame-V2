@@ -80,7 +80,7 @@ module.exports = {
       }).catch((err:any)=>{
         return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
-      await rolenamemessage.delete()
+      await rolenamemessage.delete().catch()
       if(roleNameInput.size == 0 || !roleNameInput.first()?.content) return message.reply("You have timed out! Please try again.")
       if(roleNameInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       rolename = roleNameInput.first()?.content as string
@@ -96,7 +96,7 @@ module.exports = {
         time: 30000 
       }).catch((err:any)=>{ return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
-      await rolecolormessage.delete()
+      await rolecolormessage.delete().catch()
       if(roleColorInput.size == 0 || !roleColorInput.first()?.content) return message.reply("You have timed out! Please try again.")
       if(roleColorInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       const colorString:string = roleColorInput.first()?.content as string
@@ -124,7 +124,7 @@ module.exports = {
       }).catch((err:any)=>{
         return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
-      await roleiconmessage.delete()
+      await roleiconmessage.delete().catch()
       if(roleIconInput.size == 0) return message.reply("You have timed out! Please try again.")
       if(roleIconInput.first()?.content.toUpperCase() == "CANCEL") return message.reply("I Have cancelled the role creation!")
       if(roleIconInput.first()?.attachments.first()){
@@ -186,7 +186,7 @@ module.exports = {
         await newRoleData.delete().catch()
         return message.reply("You have timed out! Please try again.")
       }) as Collection<string, Message>
-      await roleconfirmationmessage.delete()
+      await roleconfirmationmessage.delete().catch()
       if(roleConfirmationInput.size == 0 || !roleConfirmationInput.first()?.content){
         await newRoleData.delete().catch()
         return message.reply("You have timed out! Please try again.")

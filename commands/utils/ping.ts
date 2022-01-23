@@ -12,7 +12,7 @@ module.exports = {
     const timeNow = new Date().getTime()
     const timeDiff = (messageTimeSent - timeNow)/1000
     const newMessage = await message.reply(`Pong! Execution time ` + "`" + timeDiff + "`"+ " ms");
-    const newMessageTimeSent = (newMessage.createdAt.getTime() - messageTimeSent)/1000
+    const newMessageTimeSent = Math.abs((newMessage.createdAt.getTime() - messageTimeSent)/1000)
     return newMessage.edit(`Pong! Execution time ` + "`" + timeDiff + "ms`"+ " Round Trip time " + "`" + newMessageTimeSent + "ms`")
   }
 }

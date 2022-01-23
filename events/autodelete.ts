@@ -10,7 +10,7 @@ module.exports = {
     for(const words of wordListJSON){
       const regexExpression = new RegExp(words, "i")
       if(regexExpression.test(message.content)){
-        message.delete().catch(err => {
+        await message.delete().catch(err => {
           return
         })
       }
