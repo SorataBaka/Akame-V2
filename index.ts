@@ -1,5 +1,5 @@
 import { Client, Intents, Collection } from "discord.js"
-import { config } from "dotenv"
+import "dotenv/config"
 
 import { Command, Events, ClientExtensionInterface, ClientFunctionInterface, ClientCollectionsInterface, ClientDatabaseInterface } from "./types"
 import ClientFunction from "./assets/classes/ClientFunctions"
@@ -7,7 +7,6 @@ import ClientCollection from "./assets/classes/ClientCollections"
 import ClientDatabase from "./assets/classes/ClientDatabase"
 // import ClientAPI from "./unsused/ClientAPI"
 import fs from "fs"
-config()
 console.clear()
 if(!process.env.TOKEN || !process.env.PREFIX  || !process.env.URI) {
     console.error("Environmental variable for TOKEN, PREFIX, and URI is needed.")
@@ -75,9 +74,15 @@ for(const eventFile of subEventFolder){
 }
 
 //Login the bot
-client.login(TOKEN).catch((error:any) => {
-  console.log(error)
-  console.log("Failed at logging in to discord API")
+client.login(TOKEN).then((data:any) => {
+  if(data) console.log("Login Successful")
+  else console.log("Failed login")
+}).catch((error:Error) => {
+  console.log("Login Failed")
+  console.error(error)
+  client.destroy()
+  console.log("Shutting down")
+  process.exit(1)
 })
 export { client }
 process.on("SIGINT" || "SIGTERM", () => {
