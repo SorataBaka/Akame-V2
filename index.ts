@@ -75,7 +75,10 @@ for(const eventFile of subEventFolder){
 }
 
 //Login the bot
-client.login(TOKEN)
+client.login(TOKEN).catch((error:any) => {
+  console.log(error)
+  console.log("Failed at logging in to discord API")
+})
 export { client }
 process.on("SIGINT" || "SIGTERM", () => {
   console.log("Shutting down")
