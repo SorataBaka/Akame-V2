@@ -13,6 +13,8 @@ module.exports = {
     const VoiceChannel = message.member?.voice.channel as VoiceChannel
     const setregion = await VoiceChannel.setRTCRegion(args[0]).catch(err => {return undefined})
     if(!setregion) return message.reply("There seems to be a problem setting the region to your channel. Please make sure the region you provided exists.").catch()
-    return message.reply("I Have set the RTC region to your voice channel to " + "`" + args[0] + "`").catch()
+    return message.channel.send({
+      content: "I Have set the RTC region to your voice channel to " + "`" + args[0] + "`"
+    }).catch()
   }
 }
