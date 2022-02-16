@@ -19,7 +19,7 @@
     "start": "tsc && node ./build/index.js",
     "start-ts": "ts-node index.ts",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node index.ts"
+    "dev": "nodemon --exec node ./build/index.js"
   },
   "keywords": [
     "discord",
