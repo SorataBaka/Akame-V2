@@ -21,12 +21,14 @@ module.exports = {
       if(!message.guild?.roles.cache.has(args as string)) return message.reply("It seems like the role you mentioned doesn't exist in this server. Please try again.")
       rolefromid = message.guild?.roles.cache.get(args as string) as Role
     }
-    const rolequery = await client.ClientDatabase.boosterroles.find({guildID: message.guild?.id, roleID: rolefromid.id})
+    const rolequery = await client.ClientDatabase.boosterroles.find({guildID: message.guild?.id, roleID: rolefromid.id}).catch((err:Error) => {
+      return message.reply("It seems like there is a problem with the database. Please contact an admin.")
+    })
     if(rolequery.length == 0) return message.reply("It seems like the role you are looking for doesn't have an owner. Please try again.")
     const memberid = rolequery[0].memberID
     const member = await message.guild?.members.cache.get(memberid)
     if(!member) return message.reply("It seems like the owner of this role has left the server. Please contact an admin to fix this.")
-    return message.reply("The owner of this role is " + "`" + member.user.tag + "`")
+    return message.reply("The owner of this role is " + "`" + member.user.tag + "`").catch()
 
   }
 }
