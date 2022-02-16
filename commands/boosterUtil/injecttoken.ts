@@ -22,7 +22,6 @@ module.exports = {
     }
     const roleMemberList:Collection<string, GuildMember> = message.guild?.roles.cache.get(boostroleid)?.members as Collection<string, GuildMember>
     for(const member of roleMemberList){
-      console.log(member[0])
       const guildMember:GuildMember = member[1]
       const guildMemberID:string = guildMember.id
       const roleQuery = await client.ClientDatabase.boosterroles.find({guildID: message.guild?.id, memberID: guildMemberID})
@@ -41,7 +40,6 @@ module.exports = {
           upsert: true
         }).then(async(data:any)=>{
           successWrite = successWrite + 1
-          console.log(successWrite)
           const tokenEmbed = new MessageEmbed()
             .setThumbnail(client.user?.avatarURL() as string)
             .setAuthor(`Thank you so much for boosting the server ${guildMember.user.tag}!!!`)

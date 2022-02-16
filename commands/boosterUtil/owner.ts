@@ -8,7 +8,6 @@ module.exports = {
   commandGroup: "Booster",
   commandGroupName: "owner",
   async execute(message: Message, args: string[] | string, client: ClientExtensionInterface){
-    console.log(args)
     if(args.length == 0) return message.reply("Please mention the role you want to check the owner of.")
     const role = message.guild?.roles.cache.filter((role:Role, key:string):boolean  =>  {
       //use regex to match the role name
