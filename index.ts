@@ -20,7 +20,7 @@ const REDIS_URI = process.env.REDIS_CONNECTION as string
 
 //Set bot intents
 const intents:Intents = new Intents()
-intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_VOICE_STATES)
+intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_TYPING)
 
 //Create new client
 export default class ClientExtension extends Client implements ClientExtensionInterface{

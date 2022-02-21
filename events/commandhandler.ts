@@ -23,7 +23,7 @@ module.exports = {
     if(command.args == "single"){
       args = args.join(" ")
     }
-    await command.execute(message, args, client)
-    return client.ClientCollection.activeCommand.delete(message.member?.id as string)
+    await command.execute(message, args, client).catch()
+    if(client.ClientCollection.activeCommand.has(message.member?.id as string)) return client.ClientCollection.activeCommand.delete(message.member?.id as string)
   }
 }
