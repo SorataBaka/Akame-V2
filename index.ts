@@ -145,27 +145,13 @@ client.once("ready", () => {
 });
 
 //Login the bot
-client
-	.login(TOKEN)
-	.then((data: any) => {
-		if (data) console.log("Login Successful");
-		else console.log("Failed login");
-	})
-	.catch((error: Error) => {
-		console.log(`Attempted login with token ${TOKEN} Failed`);
-		console.error(error);
-		client.destroy();
-		console.log("Shutting down");
-		process.exit(1);
-	});
-
+client.login(TOKEN);
 const debugOn = process.env.debug;
 if (debugOn === "true") {
 	client.on("debug", (info: string) => {
 		console.log(info);
 	});
 }
-
 export { client };
 process.on("SIGINT" || "SIGTERM", () => {
 	console.log("Shutting down");
