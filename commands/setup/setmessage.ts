@@ -61,8 +61,7 @@ module.exports = {
 					upsert: true,
 				}
 			)
-			.catch((err: void) => {
-				console.log(err);
+			.catch(() => {
 				return message
 					.reply(
 						"There seems to be a problem saving this reaction message. Please try again or contact an administrator!"

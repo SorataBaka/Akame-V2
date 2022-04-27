@@ -26,9 +26,7 @@ module.exports = {
 		});
 		const roleQuery = await client.ClientDatabase.boosterroles
 			.find({ guildID: guildid, memberID: memberid })
-			.catch((err: any) => {
-				console.log(err);
-			});
+			.catch();
 		if (roleQuery.length == 0)
 			return message
 				.reply(
