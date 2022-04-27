@@ -13,11 +13,11 @@ module.exports = {
 		client: ClientExtensionInterface
 	) {
 		if (!message.member?.permissions.has("MANAGE_GUILD"))
-			return message.reply(
-				"You do not have the permission to use this command!"
-			);
+			return message
+				.reply("You do not have the permission to use this command!")
+				.catch();
 		if (!message.mentions?.members?.first())
-			return message.reply("Please mention a user in this command");
+			return message.reply("Please mention a user in this command").catch();
 		const guildid = message.guild?.id;
 		const memberid = message.mentions.members.first()?.id;
 		await client.ClientDatabase.boostertoken.findOneAndDelete({

@@ -29,9 +29,11 @@ module.exports = {
 				guildID: message.guild?.id,
 			});
 			if (guildquery.length == 0 || !guildquery[0].boosterRoleID)
-				return message.reply(
-					"It seems like this server is not configured to handle custom boost roles yet. Please contact an admin and try again later!"
-				);
+				return message
+					.reply(
+						"It seems like this server is not configured to handle custom boost roles yet. Please contact an admin and try again later!"
+					)
+					.catch();
 			boostroleid = guildquery[0].boosterRoleID;
 			await client.ClientDatabase.setAsync(
 				`boostrole:${message.guild?.id}`,
@@ -39,12 +41,16 @@ module.exports = {
 			);
 		}
 		if (!message.guild?.roles.cache.has(boostroleid))
-			return message.reply(
-				"It seems like the boost role in this server has been deleted. Please contact an admin."
-			);
+			return message
+				.reply(
+					"It seems like the boost role in this server has been deleted. Please contact an admin."
+				)
+				.catch();
 		// if(!message.member?.roles.cache.has(boostroleid)) return message.reply("Hi! It seems like you are not a booster of this server. You're not allowed to use this command!")
 		if (args.length == 0)
-			return message.reply("Please provide a token to use this command!");
+			return message
+				.reply("Please provide a token to use this command!")
+				.catch();
 
 		const memberid: string = message.member?.id as string;
 		const guildid: string = message.guild?.id as string;
@@ -59,18 +65,22 @@ module.exports = {
 			query[0].memberid != memberid ||
 			query[0].token != token
 		) {
-			return message.reply(
-				"I'm sorry, it seems like your token is invalid or you are not a registered booster! Please contact an admin if you need help."
-			);
+			return message
+				.reply(
+					"I'm sorry, it seems like your token is invalid or you are not a registered booster! Please contact an admin if you need help."
+				)
+				.catch();
 		}
 		const rolequery = await client.ClientDatabase.boosterroles.find({
 			guildID: guildid,
 			memberID: memberid,
 		});
 		if (rolequery.length != 0)
-			return message.reply(
-				"It seems like you already have a role created in this server. The maximum amount of owned roles per booster is only 1!"
-			);
+			return message
+				.reply(
+					"It seems like you already have a role created in this server. The maximum amount of owned roles per booster is only 1!"
+				)
+				.catch();
 
 		var rolename: string;
 		var rolecolor: any;
@@ -78,10 +88,10 @@ module.exports = {
 		var newRoleData: Role;
 		const channel: TextChannel = message.channel as TextChannel;
 		const roleNameEmbed = new MessageEmbed()
-			.setAuthor(
-				`-${client.user?.username}`,
-				client.user?.avatarURL() as string
-			)
+			.setAuthor({
+				name: `-${client.user?.username}`,
+				iconURL: client.user?.displayAvatarURL(),
+			})
 			.setTitle(
 				"Please type a role name! This will be the name of the role you are creating."
 			)
@@ -89,13 +99,15 @@ module.exports = {
 				"You won't be able to change this in the future so make sure you choose correctly!"
 			)
 			.setTimestamp()
-			.setFooter("Type `cancel` to abort role creation!")
+			.setFooter({
+				text: "Type `cancel` to abort role creation!",
+			})
 			.setColor(await client.ClientFunction.generateColor());
 		const roleColorEmbed = new MessageEmbed()
-			.setAuthor(
-				`-${client.user?.username}`,
-				client.user?.avatarURL() as string
-			)
+			.setAuthor({
+				name: `-${client.user?.username}`,
+				iconURL: client.user?.displayAvatarURL(),
+			})
 			.setTitle(
 				"Please provide a role color! This will be the color of the role you are creating."
 			)
@@ -104,13 +116,15 @@ module.exports = {
 			)
 			.addField("Search HEX code here:", "https://htmlcolorcodes.com/")
 			.setTimestamp()
-			.setFooter("Type `cancel` to abort role creation!")
+			.setFooter({
+				text: "Type `cancel` to abort role creation!",
+			})
 			.setColor(await client.ClientFunction.generateColor());
 		const roleIconEmbed = new MessageEmbed()
-			.setAuthor(
-				`-${client.user?.username}`,
-				client.user?.avatarURL() as string
-			)
+			.setAuthor({
+				name: `-${client.user?.username}`,
+				iconURL: client.user?.displayAvatarURL(),
+			})
 			.setTitle(
 				"Please provide a role icon! This will be the icon of the role you are creating."
 			)
@@ -122,25 +136,31 @@ module.exports = {
 				"Please only send an image for the icon. If the format of the image is other than png or jpeg, it will not work!"
 			)
 			.setTimestamp()
-			.setFooter("Type `cancel` to abort role creation!")
+			.setFooter({
+				text: "Type `cancel` to abort role creation!",
+			})
 			.setColor(await client.ClientFunction.generateColor());
 		const confirmationEmbed = new MessageEmbed()
-			.setAuthor(
-				`-${client.user?.username}`,
-				client.user?.avatarURL() as string
-			)
+			.setAuthor({
+				name: `-${client.user?.username}`,
+				iconURL: client.user?.displayAvatarURL(),
+			})
 			.setTitle("Please preview the role you just created!")
 			.setDescription(
 				"I have created the role and given it to you. You can check the role in your profile. Once you are satisfied, type `confirm` to finish role creation! Otherwise, if you would like to change it, type `cancel` and try again!"
 			)
 			.setTimestamp()
-			.setFooter("Type `cancel` to abort role creation!")
+			.setFooter({
+				text: "Type `cancel` to abort role creation!",
+			})
 			.setColor(await client.ClientFunction.generateColor());
 
 		const roleNameFunction = async (): Promise<any> => {
-			const rolenamemessage = await message.reply({
-				embeds: [roleNameEmbed],
-			});
+			const rolenamemessage = await message
+				.reply({
+					embeds: [roleNameEmbed],
+				})
+				.catch();
 			const roleNameInput: Collection<string, Message> = (await channel
 				.awaitMessages({
 					max: 1,
@@ -148,20 +168,22 @@ module.exports = {
 					time: 30000,
 				})
 				.catch((err: any) => {
-					return message.reply("You have timed out! Please try again.");
+					return message.reply("You have timed out! Please try again.").catch();
 				})) as Collection<string, Message>;
 			if (rolenamemessage.deletable) await rolenamemessage.delete().catch();
 			if (roleNameInput.size == 0 || !roleNameInput.first()?.content)
-				return message.reply("You have timed out! Please try again.");
+				return message.reply("You have timed out! Please try again.").catch();
 			if (roleNameInput.first()?.content.toUpperCase() == "CANCEL")
-				return message.reply("I Have cancelled the role creation!");
+				return message.reply("I Have cancelled the role creation!").catch();
 			rolename = roleNameInput.first()?.content as string;
 			return roleColorFunction();
 		};
 		const roleColorFunction = async (): Promise<any> => {
-			const rolecolormessage = await message.reply({
-				embeds: [roleColorEmbed],
-			});
+			const rolecolormessage = await message
+				.reply({
+					embeds: [roleColorEmbed],
+				})
+				.catch();
 			const roleColorInput: Collection<string, Message> = (await channel
 				.awaitMessages({
 					max: 1,
@@ -169,18 +191,18 @@ module.exports = {
 					time: 30000,
 				})
 				.catch((err: any) => {
-					return message.reply("You have timed out! Please try again.");
+					return message.reply("You have timed out! Please try again.").catch();
 				})) as Collection<string, Message>;
 			if (rolecolormessage.deletable) await rolecolormessage.delete().catch();
 			if (roleColorInput.size == 0 || !roleColorInput.first()?.content)
-				return message.reply("You have timed out! Please try again.");
+				return message.reply("You have timed out! Please try again.").catch();
 			if (roleColorInput.first()?.content.toUpperCase() == "CANCEL")
-				return message.reply("I Have cancelled the role creation!");
+				return message.reply("I Have cancelled the role creation!").catch();
 			const colorString: string = roleColorInput.first()?.content as string;
 			const regexString = new RegExp("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
 			const colorValid = regexString.test(colorString);
 			if (!colorValid) {
-				message.reply("Please provide a valid color code!");
+				message.reply("Please provide a valid color code!").catch();
 				return roleColorFunction();
 			}
 			const rgbArray = convertHexToRgb(colorString);
@@ -191,9 +213,11 @@ module.exports = {
 
 		const roleIconFunction = async (): Promise<any> => {
 			var tempRoleURL: string;
-			const roleiconmessage = await message.reply({
-				embeds: [roleIconEmbed],
-			});
+			const roleiconmessage = await message
+				.reply({
+					embeds: [roleIconEmbed],
+				})
+				.catch();
 			const roleIconInput: Collection<string, Message> = (await channel
 				.awaitMessages({
 					max: 1,
@@ -201,13 +225,13 @@ module.exports = {
 					time: 30000,
 				})
 				.catch((err: any) => {
-					return message.reply("You have timed out! Please try again.");
+					return message.reply("You have timed out! Please try again.").catch();
 				})) as Collection<string, Message>;
 			if (roleiconmessage.deletable) await roleiconmessage.delete().catch();
 			if (roleIconInput.size == 0)
-				return message.reply("You have timed out! Please try again.");
+				return message.reply("You have timed out! Please try again.").catch();
 			if (roleIconInput.first()?.content.toUpperCase() == "CANCEL")
-				return message.reply("I Have cancelled the role creation!");
+				return message.reply("I Have cancelled the role creation!").catch();
 			if (roleIconInput.first()?.attachments.first()) {
 				tempRoleURL = roleIconInput.first()?.attachments.first()?.url as string;
 			} else if (roleIconInput.first()?.content) {
@@ -217,14 +241,14 @@ module.exports = {
 					!roleIconInput.first()?.content.endsWith(".jpg") ||
 					!roleIconInput.first()?.content.endsWith(".jpeg")
 				) {
-					await message.reply(
-						"Please provide a valid image url! Please try again"
-					);
+					await message
+						.reply("Please provide a valid image url! Please try again")
+						.catch();
 					return roleIconFunction();
 				}
 				tempRoleURL = roleIconInput.first()?.content as string;
 			} else {
-				await message.reply("Please provide a valid image! Try again!");
+				await message.reply("Please provide a valid image! Try again!").catch();
 				return roleIconFunction();
 			}
 			const imageBuffer = await axios
@@ -235,13 +259,15 @@ module.exports = {
 				})
 				.catch();
 			if (!imageBuffer)
-				return message.reply(
-					"There seems to be a problem creating your role. Please contact an admin or try again later!"
-				);
+				return message
+					.reply(
+						"There seems to be a problem creating your role. Please contact an admin or try again later!"
+					)
+					.catch();
 			const newImageBuffer = await resizeImage(imageBuffer.data, {
 				width: 64,
 			}).catch(async () => {
-				await message.reply("Invalid format! Please try again!");
+				await message.reply("Invalid format! Please try again!").catch();
 				return roleIconFunction();
 			});
 			roleicon = newImageBuffer;
@@ -261,23 +287,29 @@ module.exports = {
 					reason: `Role Creation by ${message.author.tag}`,
 				})
 				.catch(() => {
-					return message.reply(
-						"There was an error creating your role! Please make sure the server allows icons for roles!"
-					);
+					return message
+						.reply(
+							"There was an error creating your role! Please make sure the server allows icons for roles!"
+						)
+						.catch();
 				})) as Role;
 			if (role) {
 				newRoleData = role;
 				await message.member?.roles.add(role).catch(async () => {
-					await message.reply(
-						"It seems like i'm not able to give you the role. Please contact an admin to create your custom role."
-					);
+					await message
+						.reply(
+							"It seems like i'm not able to give you the role. Please contact an admin to create your custom role."
+						)
+						.catch();
 					return role.delete().catch();
 				});
 				return roleConfirmation();
 			} else {
-				return message.reply(
-					"I'm sorry, but I was unable to create the role! Please try again!"
-				);
+				return message
+					.reply(
+						"I'm sorry, but I was unable to create the role! Please try again!"
+					)
+					.catch();
 			}
 		};
 		const roleConfirmation = async (): Promise<any> => {
@@ -292,7 +324,7 @@ module.exports = {
 				})
 				.catch(async (err: any) => {
 					await newRoleData.delete().catch();
-					return message.reply("You have timed out! Please try again.");
+					return message.reply("You have timed out! Please try again.").catch();
 				})) as Collection<string, Message>;
 			await roleconfirmationmessage.delete().catch();
 			if (
@@ -300,7 +332,7 @@ module.exports = {
 				!roleConfirmationInput.first()?.content
 			) {
 				await newRoleData.delete().catch();
-				return message.reply("You have timed out! Please try again.");
+				return message.reply("You have timed out! Please try again.").catch();
 			}
 			if (roleConfirmationInput.first()?.content.toUpperCase() == "CANCEL") {
 				return roleCancel();
