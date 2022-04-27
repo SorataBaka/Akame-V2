@@ -95,7 +95,7 @@ for (const eventFile of subEventFolder) {
 	const event: Events = require(`${eventFolderPath}/${eventFile}`);
 	client.EventCollection.set(event.name, event);
 	client.on(event.eventName, (...args: any) => {
-		event.execute(...args, client);
+		event.execute(...args, client).catch();
 	});
 }
 
