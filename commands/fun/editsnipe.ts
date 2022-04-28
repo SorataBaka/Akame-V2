@@ -37,13 +37,15 @@ module.exports = {
 		const snipeData: messageEditContent = snipeDataArray[snipeIndex].data;
 		const snipeEmbed = new MessageEmbed()
 			.setTitle("Snipe!")
-			.setAuthor(
-				snipeData.messageAuthor,
-				snipeData.member?.user.displayAvatarURL()
-			)
+			.setAuthor({
+				name: snipeData.messageAuthor as string,
+				iconURL: snipeData.member?.user.displayAvatarURL(),
+			})
 			.addField("Before: ", snipeData.oldMessageContent)
 			.addField("After: ", snipeData.newMessageContent)
-			.setFooter("Bang!")
+			.setFooter({
+				text: "Bang!",
+			})
 			.setColor(client.ClientFunction.generateColor())
 			.setTimestamp();
 		return message.channel
