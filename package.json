@@ -36,7 +36,7 @@
 		"@types/resize-img": "^2.0.1",
 		"@types/shortid": "^0.0.29",
 		"nodemon": "^2.0.15",
-		"ts-node": "^10.4.0",
+		"ts-node": "^10.8.1",
 		"typescript": "^4.5.4"
 	}
 }
